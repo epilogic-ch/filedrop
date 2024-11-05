@@ -204,7 +204,7 @@ const filedrop = {
                 dropzone.classList.remove('is-uploading');
 
                 if (!response.ok) {
-                    throw new Error('Erreur de réseau : ' + response.status);
+                    throw new Error('Upload failed: ' + response.status);
                 }
 
                 return response.json(); // Parse la réponse JSON
