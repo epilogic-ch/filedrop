@@ -127,6 +127,8 @@ const filedrop = {
                 }
                 catch (e) {
                     console.error(e);
+                    dropzone.classList.add('is-error');
+                    return false;
                 };
             }
 
@@ -183,6 +185,8 @@ const filedrop = {
                 } 
                 catch (e) {
                     console.error(e);
+                    dropzone.classList.add('is-error');
+                    return false;
                 }
             }
 
