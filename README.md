@@ -7,6 +7,7 @@ This is a simple file drop zone. It is based on
 documentation. References to jQuery have been removed and callback methods have
 been added.
 
+
 ## How to use
 
 Add following references in `<head>` of your html page:
@@ -48,6 +49,7 @@ filedrop.init({
 });
 ```
 
+
 ## `filedrop` init options
 
 | Option        | Description                                                                                                                                                        |
@@ -63,6 +65,7 @@ filedrop.init({
 | `onSuccess`   | Callback method called when files are uploaded successfully. See details below.                                                                                    |
 | `onError`     | Callback method called when files upload failed. See details below.                                                                                                |
 | `onComplete`  | Callback method called when files upload is finished (whenever it succeeded or failed). See details below.                                                         |
+
 
 ## Callbacks
 
@@ -85,6 +88,7 @@ onDrop: function(dropzone, files) {
 | `dropzone`    | Drop zone element              |
 | `files`       | List of selected/dropped files |
 
+
 ### onSubmit
 
 Callback method called before submit. Submit is canceled when method return `false`.
@@ -103,6 +107,7 @@ onSubmit: function(dropzone, formdata) {
 | `dropzone`    | Drop zone element                                                                                                                                   |
 | `formdata`    | Form data going to be uploaded. The formdata contains files that will be uploaded. It can be extended using `formdata.append('fieldname', <value>)` |
 
+
 ### onSuccess
 
 Callback method called when file is selected or dropped in zone.
@@ -120,6 +125,41 @@ onSuccess: function(dropzone, response) {
 | `dropzone`    | Drop zone element              |
 | `response`    | Upload request response        |
 
+Keep in mind that response is Promise. So in order to get the response payload, you'll have to use one of below syntax:
+
+-   Syntax using `then` method
+
+    ``` javascript
+    function onSuccess(dropzone, response) {
+        // extract filename from header
+        const header = response.headers.get('Content-Disposition');
+        const parts = header.split(';');
+        myobj.filename = parts[1].split('=')[1];
+    
+        // get blob content
+        response.blob().then(blob => {
+            myobj.blob = blob;
+            myobj.download();
+        });
+    }
+    ```
+
+-   Syntaxe using `await` keyaord. Please note that function must be declared as `async`.
+
+    ``` javascript
+    async function onSuccess(dropzone, response) {
+        // extraction du nom de fichier
+        const header = response.headers.get('Content-Disposition');
+        const parts = header.split(';');
+        myobj.filename = parts[1].split('=')[1];
+
+        // récupération du blob en réponse
+        myobj.blob = await response.blob();
+        myobj.download();
+    }
+    ```
+
+
 ### onError
 
 Callback method called when files upload failed.
@@ -135,7 +175,29 @@ onError: function(dropzone, error) {
 | Parameter     | Description                    |
 |---------------|--------------------------------|
 | `dropzone`    | Drop zone element              |
-| `error`       | Upload request error           |
+| `response`    | Upload request response        |
+
+Keep in mind that response is Promise. So in order to get the response payload, you'll have to use one of below syntax:
+
+-   Syntax using `then` method
+
+    ``` javascript
+    function onError(dropzone, response) {
+        response.json().then(json => {
+            myobj.showError(response.status, json);
+        });
+    }
+    ```
+
+-   Syntaxe using `await` keyaord. Please note that function must be declared as `async`.
+
+    ``` javascript
+    async function onError(dropzone, response) {
+        const json = await response.json();
+        myobj.showError(response.status, json);
+    }
+    ```
+
 
 ### onComplete
 
@@ -144,7 +206,7 @@ Callback method called when files upload is finished (whenever it succeeded or f
 Syntax:
 
 ``` javascript
-onComplete: function(dropzone, error) {
+onComplete: function(dropzone) {
     // ...
 }
 ```
