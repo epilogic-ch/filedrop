@@ -63,25 +63,29 @@ const filedrop = {
                                 e.stopPropagation();
                             });
                         });
-                        
+
                         ['dragover', 'dragenter'].forEach(name => {
                             dropzone.addEventListener(name, function (e) {
                                 dropzone.classList.add('is-dragover');
                             });
                         });
-                        
+
                         ['dragleave', 'dragend', 'drop'].forEach(name => {
                             dropzone.addEventListener(name, function (e) {
                                 dropzone.classList.remove('is-dragover');
                             });
                         });
-                        
+
                         const input = dropzone.querySelector('input[type="file"]');
-                    
+
                         dropzone.addEventListener('drop', function (e) {
                             // in case of drop, put the files in file input
                             input.files = e.dataTransfer.files;
                             dropzone.classList.remove('is-dragover');
+                            dropzone.classList.remove('is-uploading');
+                            dropzone.classList.remove('is-success');
+                            dropzone.classList.remove('is-error');
+                            dropzone.classList.remove('is-oversize');
 
                             self.handleFiles(dropzone);
                         });
@@ -165,7 +169,7 @@ const filedrop = {
             const ajaxData = new FormData();
 
             // add files
-            if (input.files) {            
+            if (input.files) {
                 if (input.getAttribute("multiple")) {
                     Array.prototype.forEach.call(input.files, function(file) {
                         ajaxData.append(input.getAttribute('name'), file);
@@ -182,7 +186,7 @@ const filedrop = {
                     if (this.options.onSubmit(dropzone, ajaxData) == false) {
                         return false;
                     }
-                } 
+                }
                 catch (e) {
                     console.error(e);
                     dropzone.classList.add('is-error');
@@ -204,56 +208,56 @@ const filedrop = {
 
             // send request
             fetch(this.options.url, fetchOpts)
-            .then(response => {
-                dropzone.classList.remove('is-uploading');
+              .then(response => {
+                  dropzone.classList.remove('is-uploading');
 
-                if (!response.ok) {
-                    throw new Error('Upload failed: ' + response.status);
-                }
+                  if (!response.ok) {
+                      return Promise.reject(response);
+                  }
 
-                return response.json(); // Parse la réponse JSON
-            })
-            .then(data => {
-                dropzone.classList.add('is-success');
+                  return response;
+              })
+              .then(response => {
+                  dropzone.classList.add('is-success');
 
-                // custom onSuccess callback
-                if (typeof this.options.onSuccess === 'function') {
-                    try {
-                        this.options.onSuccess(dropzone, data);
-                    } 
-                    catch (e) {
-                        console.error(e);
-                    }
-                }
-            })
-            .catch(error => {
-                dropzone.classList.remove('is-uploading');
-                dropzone.classList.add('is-error');
+                  // custom onSuccess callback
+                  if (typeof this.options.onSuccess === 'function') {
+                      try {
+                          this.options.onSuccess(dropzone, response);
+                      }
+                      catch (e) {
+                          console.error(e);
+                      }
+                  }
+              })
+              .catch(response => {
+                  dropzone.classList.remove('is-uploading');
+                  dropzone.classList.add('is-error');
 
-                // custom onError callback
-                if (typeof this.options.onError === 'function') {
-                    try {
-                        this.options.onError(dropzone, error);
-                    }
-                    catch (e) {
-                        console.error(e);
-                    }
-                }
-            })
-            .finally(() => {
-                input.files = null;
-                input.value = null;
+                  // custom onError callback
+                  if (typeof this.options.onError === 'function') {
+                      try {
+                          this.options.onError(dropzone, response);
+                      }
+                      catch (e) {
+                          console.error(e);
+                      }
+                  }
+              })
+              .finally(() => {
+                  input.files = null;
+                  input.value = null;
 
-                // custom onComplete callback
-                if (typeof this.options.onComplete === 'function') {
-                    try {
-                        this.options.onComplete(dropzone);
-                    }
-                    catch (e) {
-                        console.error(e);
-                    }
-                }
-            });
+                  // custom onComplete callback
+                  if (typeof this.options.onComplete === 'function') {
+                      try {
+                          this.options.onComplete(dropzone);
+                      }
+                      catch (e) {
+                          console.error(e);
+                      }
+                  }
+              });
         }
     },
 
@@ -280,8 +284,8 @@ const filedrop = {
                 label.innerHTML = droppedFiles[0].name;
             }
         });
-    },            
-          
+    },
+
     // restore initial drop zone ui
     reset: function(dropzones) {
         if (typeof dropzones === "string") {
@@ -294,7 +298,7 @@ const filedrop = {
         Array.prototype.forEach.call(dropzones, function(dropzone) {
             const label = dropzone.querySelector('label');
             label.innerHTML = dropzone.querySelector('.fd-base-label').innerHTML;
-            
+
             dropzone.classList.remove('is-dragover');
             dropzone.classList.remove('is-uploading');
             dropzone.classList.remove('is-success');
