@@ -52,20 +52,20 @@ filedrop.init({
 
 ## `filedrop` init options
 
-| Option        | Description                                                                                                                                                        |
-|---------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `url`         | Upload url                                                                                                                                                         |
-| `selector`    | Selector of file drop zones                                                                                                                                        |
-| `method`      | Upload method. Default is `POST`                                                                                                                                   |
-| `headers`     | Header sent in upload request                                                                                                                                      |
-| `maxFilesize` | Max uploadable file size (bytes)                                                                                                                                   |
-| `timeout`     | Max upload request duration (milliseconds)                                                                                                                         |
-| `autoSubmit`  | Flag `true`/`false` that indicates if upload should be launched automatically after file selection or file upload. When disabled, button "Upload" is made visible. |
-| `onDrop`      | Callback method called when files are selected or dropped in zone. See details below.                                                                              |
-| `onSubmit`    | Callback method called before submit. This method can be used to extend the form data or cancel upload. See details below.                                         |
-| `onSuccess`   | Callback method called when files are uploaded successfully. See details below.                                                                                    |
-| `onError`     | Callback method called when files upload failed. See details below.                                                                                                |
-| `onComplete`  | Callback method called when files upload is finished (whenever it succeeded or failed). See details below.                                                         |
+| Option        | Description                                                                                                                                                        | Required |
+|---------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
+| `url`         | Upload url                                                                                                                                                         |    yes   |
+| `selector`    | Selector of file drop zones                                                                                                                                        |    yes   |
+| `method`      | Upload method. Default is `POST`                                                                                                                                   |     no   |
+| `headers`     | Header sent in upload request                                                                                                                                      |     no   |
+| `maxFilesize` | Max uploadable file size (bytes)                                                                                                                                   |     no   |
+| `timeout`     | Max upload request duration (milliseconds)                                                                                                                         |     no   |
+| `autoSubmit`  | Flag `true`/`false` that indicates if upload should be launched automatically after file selection or file upload. When disabled, button "Upload" is made visible. |     no   |
+| `onDrop`      | Callback method called when files are selected or dropped in zone. See details below.                                                                              |     no   |
+| `onSubmit`    | Callback method called before submit. This method can be used to extend the form data or cancel upload. See details below.                                         |     no   |
+| `onSuccess`   | Callback method called when files are uploaded successfully. See details below.                                                                                    |     no   |
+| `onError`     | Callback method called when files upload failed. See details below.                                                                                                |     no   |
+| `onComplete`  | Callback method called when files upload is finished (whenever it succeeded or failed). See details below.                                                         |     no   |
 
 
 ## Callbacks
