@@ -22,6 +22,7 @@ const filedrop = {
 
             // optional settings
             method: 'POST',             // upload method
+            headers: null,              // headers sent in upload request
             maxFilesize: 0,             // max uploadable file size
             timeout: 0,                 // max fetch duration
             autoSubmit: true,           // enable auto-submit on drop or file selection
@@ -202,6 +203,9 @@ const filedrop = {
                 method: this.options.method,
                 body: ajaxData
             };
+            if (this.options.headers) {
+                fetchOpts.headers = this.options.headers;
+            }
             if (this.options.timeout > 0) {
                 fetchOpts.signal = AbortSignal.timeout(this.options.timeout)
             }

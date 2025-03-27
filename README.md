@@ -57,6 +57,7 @@ filedrop.init({
 | `url`         | Upload url                                                                                                                                                         |
 | `selector`    | Selector of file drop zones                                                                                                                                        |
 | `method`      | Upload method. Default is `POST`                                                                                                                                   |
+| `headers`     | Header sent in upload request                                                                                                                                      |
 | `maxFilesize` | Max uploadable file size (bytes)                                                                                                                                   |
 | `timeout`     | Max upload request duration (milliseconds)                                                                                                                         |
 | `autoSubmit`  | Flag `true`/`false` that indicates if upload should be launched automatically after file selection or file upload. When disabled, button "Upload" is made visible. |
